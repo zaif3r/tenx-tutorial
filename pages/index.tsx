@@ -1,50 +1,64 @@
-import Head from "next/head"
+import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/router"
+import { useTheme } from "next-themes"
 
+import { hero } from "@/config/i18n"
 import { siteConfig } from "@/config/site"
 import { Layout } from "@/components/layout"
 import { buttonVariants } from "@/components/ui/button"
 
 export default function IndexPage() {
+  const { locale } = useRouter()
+
+  const { theme: currentTheme, systemTheme } = useTheme()
+  const [theme, setTheme] = useState(currentTheme)
+  const [bgImage, setBgImage] = useState("")
+
+  const { title, subtitle, action } = hero[locale]
+
+  useEffect(() => {
+    setTheme(currentTheme == "system" ? systemTheme : currentTheme)
+  }, [currentTheme, systemTheme])
+
+  useEffect(() => {
+    setBgImage(getRandomImage(theme))
+  }, [theme])
+
+  function getRandomImage(theme: string) {
+    const imageCount = theme == "dark" ? 1 : 1
+    const index = Math.floor(Math.random() * imageCount)
+    return `hero-${theme}-${index + 1}.jpg`
+  }
+
   return (
     <Layout>
-      <Head>
-        <title>Next.js</title>
-        <meta
-          name="description"
-          content="Next.js template for building apps with Radix UI and Tailwind CSS"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
-        <div className="flex max-w-[980px] flex-col items-start gap-2">
-          <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-            Beautifully designed components <br className="hidden sm:inline" />
-            built with Radix UI and Tailwind CSS.
-          </h1>
-          <p className="max-w-[700px] text-lg text-slate-700 dark:text-slate-400 sm:text-xl">
-            Accessible and customizable components that you can copy and paste
-            into your apps. Free. Open Source. And Next.js 13 Ready.
-          </p>
-        </div>
-        <div className="flex gap-4">
-          <Link
-            href={siteConfig.links.docs}
-            target="_blank"
-            rel="noreferrer"
-            className={buttonVariants({ size: "lg" })}
-          >
-            Documentation
-          </Link>
-          <Link
-            target="_blank"
-            rel="noreferrer"
-            href={siteConfig.links.github}
-            className={buttonVariants({ variant: "outline", size: "lg" })}
-          >
-            GitHub
-          </Link>
+      <section
+        className="container grid min-h-screen max-w-full items-center gap-6 bg-cover pt-6 pb-8 md:py-10"
+        style={{ backgroundImage: `url(${bgImage})` }}
+      >
+        <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
+          <div className="flex flex-col items-start gap-2">
+            <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
+              {title}
+            </h1>
+            <p className="max-w-[700px] text-lg text-slate-700 dark:text-slate-400 sm:text-xl">
+              {subtitle}
+            </p>
+            <div className="mt-2 flex gap-4">
+              <Link href="/course" className={buttonVariants({ size: "lg" })}>
+                {action}
+              </Link>
+              <Link
+                target="_blank"
+                rel="noreferrer"
+                href={siteConfig.links.github}
+                className={buttonVariants({ variant: "outline", size: "lg" })}
+              >
+                GitHub
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </Layout>

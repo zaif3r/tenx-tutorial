@@ -12,18 +12,22 @@ interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: "Next.js",
+  name: "Ten X Tutorial",
   description:
     "Beautifully designed components built with Radix UI and Tailwind CSS.",
   mainNav: [
     {
-      title: "Home",
+      name: "home",
       href: "/",
+    },
+    {
+      name: "course",
+      href: "/course",
     },
   ],
   links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
-    docs: "https://ui.shadcn.com",
+    twitter: "https://twitter.com/zaif3r",
+    github: "https://github.com/zaif3r/tenx-tutorial",
+    docs: "https://zaifer.xyz",
   },
 }

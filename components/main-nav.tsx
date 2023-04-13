@@ -1,7 +1,9 @@
 import * as React from "react"
 import Link from "next/link"
+import { useRouter } from "next/router"
 
 import { NavItem } from "@/types/nav"
+import { navbar } from "@/config/i18n"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
@@ -20,6 +22,9 @@ interface MainNavProps {
 }
 
 export function MainNav({ items }: MainNavProps) {
+  const { locale } = useRouter()
+  const localeNav = navbar[locale]
+
   return (
     <div className="flex gap-6 md:gap-10">
       <Link href="/" className="hidden items-center space-x-2 md:flex">
@@ -41,7 +46,7 @@ export function MainNav({ items }: MainNavProps) {
                     item.disabled && "cursor-not-allowed opacity-80"
                   )}
                 >
-                  {item.title}
+                  {localeNav[item.name]}
                 </Link>
               )
           )}
